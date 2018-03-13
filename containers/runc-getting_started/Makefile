@@ -10,4 +10,4 @@ all:
 
 clean:
 	docker rm -f cont1
-	rm -rf rootfs/ alpine.tar config.json
+	sudo rm -rf rootfs/ alpine.tar config.json
