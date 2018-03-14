@@ -62,6 +62,15 @@
  docker rmi $(docker images | grep "^<none>" | awk '{print $3}')
  ```
 
+* Them volumes, am I right?
+ ```
+ docker volume prune
+ ```
+
+* And for the entir Docker system,
+ ```
+ docker system prune
+ ```
 
 # Extras Sides
 * [Docker configurations for Linux](https://docs.docker.com/install/linux/linux-postinstall/)
