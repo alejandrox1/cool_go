@@ -17,10 +17,10 @@ fi
 # rm exited containers.
 docker ps -aq -f status=exited | xargs -r docker rm
 
-docker run -it \
+docker run -d \
 	--net host \
-	--cpuset-cpus 0,1 \
-	--memory 512mb \
+	--cpuset-cpus 0,1,2 \
+	--memory 3gb \
 	-v /tmp/.x11-unix:/tmp/.x11-unix \
 	-e DISPLAY=unix$DISPLAY \
 	-v downloads:/home/chrome/Downloads \
