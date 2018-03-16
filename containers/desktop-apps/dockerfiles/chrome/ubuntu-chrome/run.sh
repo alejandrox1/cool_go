@@ -19,7 +19,7 @@ docker ps -aq -f status=exited | xargs -r docker rm
 
 docker run -it \
 	--net host \
-	--cpuset-cpus 0 \
+	--cpuset-cpus 0,1 \
 	--memory 512mb \
 	-v /tmp/.x11-unix:/tmp/.x11-unix \
 	-e DISPLAY=unix$DISPLAY \
@@ -31,5 +31,5 @@ docker run -it \
 	-v ${XDG_RUNTIME_DIR}/pulse/native:${XDG_RUNTIME_DIR}/pulse/native \
 	-e PULSE_SERVER=unix:${XDG_RUNTIME_DIR}/pulse/native \
 	-v /dev/shm:/dev/shm \
-	--name uchrome \
-	alejandrox1/uchrome
+	--name chrome \
+	alejandrox1/chrome
