@@ -1,2 +1,6 @@
 # Containers
 containers/virtcontainers
+
+# Ignore backups and that
+*.swp
+*.swo
