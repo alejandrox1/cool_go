@@ -52,6 +52,11 @@
  docker ps -aq -f status=exited | xargs docker rm
  ```
 
+* Delete a certain stopped container
+  ```
+  docker inspect --format "{{.State.Running}}" containername
+  ```
+
 * Delete all images
  ```
  docker image ls -a -q | xargs docker rmi
