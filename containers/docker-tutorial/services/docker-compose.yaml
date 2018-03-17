@@ -1,0 +1,22 @@
+version: "3"
+
+networks:
+    # Load-balanced overlay network
+    webnet:
+
+services:
+    web:
+        image: alejandrox1/playing-around:v0.1-rc
+        deploy:
+            replicas: 5
+            resources:
+                limits:
+                    cpus: "0.2"
+                    memory: 100M
+            restart_policy: 
+                condition: on-failure
+        ports:
+            - "80:80"
+        networks:
+            - webnet
+
