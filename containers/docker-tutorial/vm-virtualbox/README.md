@@ -64,7 +64,8 @@ sh -p 2222 username@127.0.0.1
 ```
 
 # References
+* [Managing your VM](http://www.oracle.com/technetwork/articles/servers-storage-admin/manage-vbox-cli-2264359.html#5)
+
 * [sshing into a vm](https://leemendelowitz.github.io/blog/ubuntu-server-virtualbox.html)
 
-* [vm
-  cheatsheet](https://www.perkin.org.uk/posts/create-virtualbox-vm-from-the-command-line.html)
+* [vm cheatsheet](https://www.perkin.org.uk/posts/create-virtualbox-vm-from-the-command-line.html)
