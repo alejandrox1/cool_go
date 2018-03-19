@@ -14,7 +14,7 @@
 
 package main
 
-import "github.com/alejandrox1/cool_go/k8s/boostrapping-k8s/cli/cmd"
+import "github.com/alejandrox1/cool_go/k8s/bootstrapping-k8s/cli/cmd"
 
 func main() {
 	cmd.Execute()
