@@ -1,6 +1,9 @@
 # Containers
 containers/virtcontainers
 
+# K8s
+k8s/minikube
+
 # Ignore backups and that
 *.swp
 *.swo
