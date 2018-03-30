@@ -15,16 +15,20 @@ then
 fi
 
 # rm exited containers.
-docker ps -aq -f status=exited | xargs -r docker rm
+#docker ps -aq -f status=exited | xargs -r docker rm
+state=$(docker inspect --format "{{.State.Running}}" chrome 2>/dev/null)
+if [[ "$state" == "false" ]]; then
+    docker rm chrome
+fi
 
-docker run -d \
+docker run -it \
 	--net host \
-	--cpuset-cpus 0,1,2 \
+	--cpuset-cpus 0,1 \
 	--memory 3gb \
 	-v /tmp/.x11-unix:/tmp/.x11-unix \
 	-e DISPLAY=unix$DISPLAY \
-	-v downloads:/home/chrome/Downloads \
 	-v google-chrome:/data \
+    -v downloads:/home/chrome/Downloads \
 	--security-opt seccomp=chrome.json \
 	--device /dev/snd \
 	--device /dev/dri \
