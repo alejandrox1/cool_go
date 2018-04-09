@@ -8,8 +8,8 @@ EXEC=$(OBJ:.o=.bin)
 .SECONDARY: ${OBJ}
 
 all: ${EXEC}
-	GOOS=${GOOS} GOARCH=${GOARCH} go tool compile $^
-	@objdump -j .text -t direct_topfunc_call.bin
+	GOOS=${GOOS} GOARCH=${GOARCH} go tool compile -S $^ > prg-asm.S
+	@objdump -j .text -t direct_topfunc_call.bin > memlayout.txt
 
 %.o: %.go
 	GOOS=${GOOS} GOARCH=${GOARCH} go tool compile $<
