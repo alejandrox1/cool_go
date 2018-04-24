@@ -6,6 +6,7 @@ import (
 	"net/http"
 )
 
+// whoyareHandler - Return remote address from request.
 func whoyareHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	body, err := json.Marshal(map[string]string{
