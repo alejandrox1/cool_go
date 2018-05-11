@@ -1,14 +1,18 @@
 #!/bin/bash
 
+set -e
+
 GRE="\e[32m"
 NOC="\e[0m"
 
 IMG="ubuntu-nvidia"
 TAG="docker.io/alejandrox1/ubuntu-nvidia:latest"
 
+docker build -t "${IMG}" .
+
+
 if [[ "$#" == 1 && "$1" == "build" ]]; then
     echo -e "${GRE}Building... Tagging... and Pushing image...${NOC}" && \
-        docker build -t "${IMG}" . && \
         docker tag "${IMG}" "${TAG}" && \
         docker push "${TAG}"
 fi
