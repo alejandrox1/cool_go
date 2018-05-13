@@ -1,6 +1,7 @@
 FROM ubuntu:18.04
 MAINTAINER Jorge Alarcon Ochoa
 
+# INstalling the nvidia drivers may require user-input.
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update -y && \
