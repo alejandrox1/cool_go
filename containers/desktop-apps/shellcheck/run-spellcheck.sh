@@ -26,9 +26,11 @@ if [[ $# == 1 && $1 == "push" ]]; then
 fi
 
 # Shellcheck all *.sh files in the current working directory.
-for sh in *.sh; do
-    echo -e "${GRE}Shellcheking ${sh}...${NOC}" && \
-        docker run --name "${IMG}-${sh}" \
-        -v $(pwd):/home \
-        shellchecker "${sh}"
+for sh in *; do
+    if [[ $(file -b "${sh}" | awk '{print $2}') == "shell" ]]; then
+        echo -e "${GRE}Shellcheking ${sh}...${NOC}" && \
+            docker run --name "${IMG}-${sh}" \
+            -v $(pwd):/home \
+            shellchecker "${sh}"
+    fi
 done
