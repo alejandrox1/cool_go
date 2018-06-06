@@ -7,3 +7,7 @@ k8s/minikube
 # Ignore backups and that
 *.swp
 *.swo
+
+# 
+*.bin
+*.o
