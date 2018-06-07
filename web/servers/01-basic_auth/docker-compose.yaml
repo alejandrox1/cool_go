@@ -1,9 +1,24 @@
 version: "3"
 
 networks:
-    db_net:
+    intranet:
 
 services:
+    vault:
+        build: ./vault/
+        container_name: vault
+        environment:
+            VAULT_ADDR: http://127.0.0.1:8200
+        cap_add:
+            - IPC_LOCK
+        volumes:
+            - ./vault/vault:/vault
+            - ./vault/policies:/policies
+        networks:
+            - intranet
+        ports:
+            - 8200:8200
+
     db:
         build: ./db/
         hostname: db
@@ -14,7 +29,7 @@ services:
             POSTGRES_PASSWORD: admin                                           
             POSTGRES_DB: db
         networks:
-            - db_net
+            - intranet
         ports:
             - 5432:5432
 
@@ -22,6 +37,6 @@ services:
         image: adminer
         restart: always
         networks:
-            - db_net
+            - intranet
         ports:
             - 8080:8080
