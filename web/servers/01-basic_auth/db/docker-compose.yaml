@@ -1,0 +1,27 @@
+version: "3"
+
+networks:
+    db_net:
+
+services:
+    db:
+        build: .
+        hostname: db
+        container_name: db
+        restart: always
+        environment:
+            POSTGRES_USER: admin                                           
+            POSTGRES_PASSWORD: admin                                           
+            POSTGRES_DB: db
+        networks:
+            - db_net
+        ports:
+            - 5432:5432
+
+    adminer:
+        image: adminer
+        restart: always
+        networks:
+            - db_net
+        ports:
+            - 8080:8080
