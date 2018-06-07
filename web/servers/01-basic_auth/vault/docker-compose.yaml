@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+    vault:
+        build: .
+        container_name: vault
+        environment:
+            VAULT_ADDR: http://127.0.0.1:8200
+        cap_add:
+            - IPC_LOCK
+        volumes:
+            - ./vault:/vault
+        ports:
+            - 8200:8200
+
