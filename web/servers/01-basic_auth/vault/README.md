@@ -17,7 +17,14 @@ vault login
 
 To store secrets
 ```
-vault write secret/postgresql_creds username=user password=pas
+vault write secret/postgresql_creds username=admin password=admin
+```
+
+To create policies
+```
+vault policy write common /policies/common.json
+
+vault token create -policy="common"
 ```
 
 Once you are done
@@ -36,7 +43,7 @@ vault status
 
 To start guarding secrets we must first unseal the vault,
 ```
-/work # vault operator unseal
+/ # vault operator unseal
 Unseal Key (will be hidden): 
 Key                Value
 ---                -----
@@ -49,7 +56,7 @@ Unseal Nonce       d798b4fd-ac68-42d3-89f7-2eef5bcd6c43
 Version            0.10.1
 HA Enabled         true
 
-/work # vault operator unseal
+/ # vault operator unseal
 Unseal Key (will be hidden): 
 Key                Value
 ---                -----
@@ -62,7 +69,7 @@ Unseal Nonce       d798b4fd-ac68-42d3-89f7-2eef5bcd6c43
 Version            0.10.1
 HA Enabled         true
 
-/work # vault operator unseal
+/ # vault operator unseal
 Unseal Key (will be hidden): 
 Key             Value
 ---             -----
@@ -80,7 +87,7 @@ HA Enabled      false
 Now that the vault is unsealed, authenticate by using your `initial root
 token`:
 ```
-work # vault login
+/ # vault login
 Token (will be hidden): 
 Success! You are now authenticated. The token information displayed below
 is already stored in the token helper. You do NOT need to run "vault login"
@@ -97,17 +104,17 @@ token_policies     [root]
 
 ## Storing secrets
 ```
-/work # vault write secret/postgresql_creds username=user password=pass
+/ # vault write secret/postgresql_creds username=user password=pass
 Success! Data written to: secret/postgresql_creds
 
-/work # vault read secret/postgresql_creds
+/ # vault read secret/postgresql_creds
 Key                 Value
 ---                 -----
 refresh_interval    10h
 password            pass
 username            user
 
-/work # vault read -format=json secret/postgresql_creds
+/ # vault read -format=json secret/postgresql_creds
 {
   "request_id": "b4c87e8a-8d8a-4afa-9c55-b856de3429ce",
   "lease_id": "",
@@ -120,6 +127,22 @@ username            user
   "warnings": null
 }
 
-/work # vault operator seal
+/ # vault operator seal
 Success! Vault is sealed.
+```
+
+## Policies
+```
+/ # vault policy write common /policies/common.json 
+Success! Uploaded policy: common
+
+/ # vault token create -policy="common"
+Key                Value
+---                -----
+token              a2bd9dbc-ebc5-4817-2f4a-93721b1a89a2
+token_accessor     368f6213-5da9-2bdb-259d-84aa455e4cb6
+token_duration     10h
+token_renewable    true
+token_policies     [common default]
+
 ```
