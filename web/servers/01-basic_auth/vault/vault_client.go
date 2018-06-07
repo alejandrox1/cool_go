@@ -5,7 +5,7 @@ import (
     "fmt"
     "os"
 
-//    "github.com/hashicorp/vault/api"
+    "github.com/hashicorp/vault/api"
 )
 
 type Vault struct {
@@ -33,16 +33,24 @@ func readVaultConfig(filename string) (vaultConfig Vault, err error) {
 func main() {
     vaultConfig, err := readVaultConfig("./vault.json")
     if err != nil {
-        fmt.Println(err.Error())
+        fmt.Println(err)
         os.Exit(1)
     }
 
-    encoder := json.NewEncoder(os.Stdout)
-    encoder.SetIndent("", "\t")
-    err = encoder.Encode(&vaultConfig)
+    client, err := api.NewClient(&api.Config{
+        Address: vaultConfig.Addr,
+    })
     if err != nil {
-        fmt.Println(err.Error())
+        fmt.Println(err)
         os.Exit(1)
     }
+    client.SetToken(vaultConfig.Token)
 
+    secretValues, err := client.Logical().Read("secret/postgresql_creds")
+    if err != nil {
+        fmt.Println(err)
+        os.Exit(1)
+    }
+    fmt.Printf("%+v\n", secretValues)
+    fmt.Printf("%s - %s\n", secretValues.Data["username"], secretValues.Data["password"])
 }
