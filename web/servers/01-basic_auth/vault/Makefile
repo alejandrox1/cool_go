@@ -2,7 +2,7 @@
 
 all:
 	mkdir -p vault/config && \
-		chmod -R g+rw vault/ && \
+		chmod g+rw vault/ && \
 		docker-compose up --build
 
 login:
