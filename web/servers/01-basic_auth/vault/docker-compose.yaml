@@ -10,6 +10,7 @@ services:
             - IPC_LOCK
         volumes:
             - ./vault:/vault
+            - ./policies:/policies
         ports:
             - 8200:8200
 
