@@ -15,7 +15,17 @@ vault operator unseal
 vault login
 ```
 
-## Step by step
+To store secrets
+```
+vault write secret/postgresql_creds username=user password=pas
+```
+
+Once you are done
+```
+vault operator seal
+```
+
+## Seting it up
 First, initialise the vault and check the server's status by running the
 follwoing commands inside the vault container (`make login`):
 ```
@@ -85,4 +95,31 @@ token_renewable    false
 token_policies     [root]
 ```
 
+## Storing secrets
+```
+/work # vault write secret/postgresql_creds username=user password=pass
+Success! Data written to: secret/postgresql_creds
 
+/work # vault read secret/postgresql_creds
+Key                 Value
+---                 -----
+refresh_interval    10h
+password            pass
+username            user
+
+/work # vault read -format=json secret/postgresql_creds
+{
+  "request_id": "b4c87e8a-8d8a-4afa-9c55-b856de3429ce",
+  "lease_id": "",
+  "lease_duration": 36000,
+  "renewable": false,
+  "data": {
+    "password": "pass",
+    "username": "user"
+  },
+  "warnings": null
+}
+
+/work # vault operator seal
+Success! Vault is sealed.
+```
