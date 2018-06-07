@@ -1,8 +1,8 @@
 .PHONY: all clean
 
 all:
-	mkdir vault && \
-		chmod g+rw vault/ && \
+	mkdir -p vault/config && \
+		chmod -R g+rw vault/ && \
 		docker-compose up --build
 
 login:
