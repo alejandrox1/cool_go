@@ -31,7 +31,7 @@ func readVaultConfig(filename string) (vaultConfig Vault, err error) {
 
 
 func main() {
-    vaultConfig, err := readVaultConfig("./vault.json")
+    vaultConfig, err := readVaultConfig("./configs/vault.json")
     if err != nil {
         fmt.Println(err)
         os.Exit(1)
