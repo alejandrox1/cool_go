@@ -1,0 +1,11 @@
+{
+  "path": {
+    "secret/postgresql_creds": {
+      "capabilities": [
+        "read",
+        "list"
+      ]
+    }
+  }
+}
+
