@@ -22,4 +22,5 @@ server:
 		docker-compose up --build server
 
 clean:
-	sudo rm -rf vault/vault/
+	sudo rm -rf vault/vault/ && \
+		docker-compose down
