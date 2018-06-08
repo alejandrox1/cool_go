@@ -1,4 +1,5 @@
 {
     "vault_token": "a2bd9dbc-ebc5-4817-2f4a-93721b1a89a2",
-    "vault_address": "http://127.0.0.1:8200"
+    "vault_address": "http://127.0.0.1:8200",
+    "vault_service": "secret/postgresql_creds" 
 }
