@@ -10,6 +10,7 @@ import (
 
 type Vault struct {
     Token string `json:"vault_token"`
+    Service string `json:"vault_service"`
     Addr  string `json:"vault_address"`
 }
 
@@ -46,7 +47,7 @@ func main() {
     }
     client.SetToken(vaultConfig.Token)
 
-    secretValues, err := client.Logical().Read("secret/postgresql_creds")
+    secretValues, err := client.Logical().Read(vaultConfig.Service)
     if err != nil {
         fmt.Println(err)
         os.Exit(1)
