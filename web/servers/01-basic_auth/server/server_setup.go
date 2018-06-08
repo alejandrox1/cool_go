@@ -39,7 +39,7 @@ func getDBCreds(configFile string) string {
 	}
 
 	client, err := api.NewClient(&api.Config{
-        Address: "http://vault", //vaultConfig.Addr,
+		Address: "http://vault", //vaultConfig.Addr,
 	})
 	if err != nil {
 		fmt.Println(err)
@@ -57,5 +57,5 @@ func getDBCreds(configFile string) string {
 	creds.WriteString(fmt.Sprintf("user=%s ", secretValues.Data["username"]))
 	creds.WriteString(fmt.Sprintf("password=%s ", secretValues.Data["password"]))
 	creds.WriteString("host=db dbname=db sslmode=disable")
-    return creds.String()
+	return creds.String()
 }
