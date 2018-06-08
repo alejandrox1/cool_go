@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+    "errors"
 	"fmt"
 	"os"
 	"strings"
@@ -48,14 +49,24 @@ func getDBCreds(configFile string) string {
 	client.SetToken(vaultConfig.Token)
 
 	secretValues, err := client.Logical().Read(vaultConfig.Service)
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+    if err != nil {
+		panic(err)
 	}
+    if secretValues == nil {
+        panic(fmt.Sprintf("getDBCreds error:%s doesn't seem to exist", vaultConfig.Service))
+    }
 
 	var creds strings.Builder
-	creds.WriteString(fmt.Sprintf("user=%s ", secretValues.Data["username"]))
-	creds.WriteString(fmt.Sprintf("password=%s ", secretValues.Data["password"]))
+    if val, ok := secretValues.Data["username"]; ok {
+        creds.WriteString(fmt.Sprintf("user=%s ", val))
+    } else {
+        return "", errors.New("getDBCreds error: no username field on vault path")
+    }
+    if val, ok := secretValues.Data["password"]; ok {
+        creds.WriteString(fmt.Sprintf("password=%s ", val))
+    } else {
+        return "", errors.New("getDBCreds error: no password field on vault path")
+    }
 	creds.WriteString("host=db dbname=db sslmode=disable")
-	return creds.String()
+	return creds.String(), nil
 }
