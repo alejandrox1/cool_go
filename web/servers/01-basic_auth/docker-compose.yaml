@@ -14,8 +14,6 @@ services:
         volumes:
             - ./vault/vault:/vault
             - ./vault/policies:/policies
-        networks:
-            - intranet
         ports:
             - 8200:8200
 
@@ -40,3 +38,14 @@ services:
             - intranet
         ports:
             - 8080:8080
+
+    server:
+        build: ./server/ 
+        hostname: server
+        container_name: server
+        volumes:
+            - ./vault/configs:/vault/configs
+        networks:
+            - intranet
+        ports:
+            - 8000:8000
