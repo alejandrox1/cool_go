@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"log"
 	"net/http"
+    "fmt"
 
 	_ "github.com/lib/pq"
 )
@@ -11,12 +12,16 @@ import (
 //var db *sql.DB
 
 func initDB() {
-	dataSource := getDBCreds("/vault/configs/vault.json")
+	dataSource, err := getDBCreds("/vault/configs/vault.json")
+    if err != nil {
+        panic(err)
+    }
 
-	_, err := sql.Open("postgres", dataSource)
+	_, err = sql.Open("postgres", dataSource)
 	if err != nil {
-		panic(err)
-	}
+	    panic(err)
+    }
+    fmt.Println(dataSource)
 }
 
 func main() {
