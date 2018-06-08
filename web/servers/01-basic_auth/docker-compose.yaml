@@ -1,19 +1,25 @@
 version: "3"
 
 networks:
+    publicnet:
+        driver: bridge
+
     intranet:
 
 services:
     vault:
         build: ./vault/
+        hostname: vault
         container_name: vault
         environment:
-            VAULT_ADDR: http://127.0.0.1:8200
+            VAULT_ADDR: http://0.0.0.0:8200
         cap_add:
             - IPC_LOCK
         volumes:
             - ./vault/vault:/vault
             - ./vault/policies:/policies
+        networks:
+            - publicnet
         ports:
             - 8200:8200
 
@@ -34,6 +40,8 @@ services:
     adminer:
         image: adminer
         restart: always
+        hostname: adminer
+        container_name: adminer
         networks:
             - intranet
         ports:
@@ -47,5 +55,6 @@ services:
             - ./vault/configs:/vault/configs
         networks:
             - intranet
+            - publicnet
         ports:
             - 8000:8000
