@@ -32,15 +32,14 @@ func readVaultConfig(filename string) (vaultConfig Vault, err error) {
 	return
 }
 
-func getDBCreds(configFile string) string {
+func getDBCreds(configFile string) (string, error) {
 	vaultConfig, err := readVaultConfig(configFile)
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		panic(err)
 	}
 
 	client, err := api.NewClient(&api.Config{
-		Address: "http://vault", //vaultConfig.Addr,
+		Address: vaultConfig.Addr,
 	})
 	if err != nil {
 		fmt.Println(err)
