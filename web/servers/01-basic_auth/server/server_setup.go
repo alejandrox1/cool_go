@@ -19,13 +19,13 @@ type Vault struct {
 func readVaultConfig(filename string) (vaultConfig Vault, err error) {
 	contents, err := os.Open(filename)
 	if err != nil {
-		fmt.Printf("readVaultConfig error opening file: %s\n", err.Error())
+		fmt.Printf("readVaultConfig error while opening file: %s\n", err.Error())
 		return
 	}
 
 	err = json.NewDecoder(contents).Decode(&vaultConfig)
 	if err != nil {
-		fmt.Printf("readVaultConfig error decoding json: %s\n", err.Error())
+		fmt.Printf("readVaultConfig error while decoding json: %s\n", err.Error())
 		return
 	}
 
