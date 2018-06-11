@@ -28,7 +28,7 @@ func main() {
 	initDB()
 
     http.HandleFunc("/signup", Signup)
-	http.HandleFunc("/singin", Signin)
+	//http.HandleFunc("/singin", Signin)
 
 	log.Fatal(http.ListenAndServe(":8000", nil))
 }
