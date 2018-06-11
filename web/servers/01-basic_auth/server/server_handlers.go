@@ -1,13 +1,10 @@
 package main
 
 import (
-    "database/sql"
     "encoding/json"
     "fmt"
     "golang.org/x/crypto/bcrypt"
     "net/http"
-
-    _ "github.com/lib/pq"
 )
 
 // Credentials models the structure of a user in the request body and the db.
@@ -23,7 +20,7 @@ func Signup(w http.ResponseWriter, r *http.Request){
     err := json.NewDecoder(r.Body).Decode(creds)
     if err != nil {
         w.WriteHeader(http.StatusBadRequest)
-        fmt.Println(err)
+        fmt.Printf("Signup error while decoding request: %s\n", err)
         return
     }
 
@@ -31,7 +28,7 @@ func Signup(w http.ResponseWriter, r *http.Request){
     // argument is the cost of hasing, which we arbitrarily set as 8.
     hashedPassword, err := bcrypt.GenerateFromPassword([]byte(creds.Password), 8)
     if err != nil {
-        fmt.Println(err)
+        fmt.Println("Signup error while hashing password: %s\n", err)
         return
     }
 
@@ -39,7 +36,7 @@ func Signup(w http.ResponseWriter, r *http.Request){
      _, err = db.Query("insert into users values ($1, $2)", creds.Username, string(hashedPassword))
     if err != nil {
         w.WriteHeader(http.StatusInternalServerError)
-        fmt.Println(err)
+        fmt.Println("Signup error while storing Credentials into database: %s\n", err)
         return
     }
 
