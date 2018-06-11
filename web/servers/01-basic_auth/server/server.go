@@ -9,7 +9,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-//var db *sql.DB
+var db *sql.DB
 
 func initDB() {
 	dataSource, err := getDBCreds("/vault/configs/vault.json")
@@ -17,7 +17,7 @@ func initDB() {
         panic(err)
     }
 
-	_, err = sql.Open("postgres", dataSource)
+	db, err = sql.Open("postgres", dataSource)
 	if err != nil {
 	    panic(err)
     }
@@ -27,8 +27,8 @@ func initDB() {
 func main() {
 	initDB()
 
-	//http.HandleFunc("/singin", Signin)
-	//http.HandleFunc("/signup", Signup)
+    http.HandleFunc("/signup", Signup)
+	http.HandleFunc("/singin", Signin)
 
 	log.Fatal(http.ListenAndServe(":8000", nil))
 }
