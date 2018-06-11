@@ -13,5 +13,5 @@ caried out.
 
 To test it out,
 ```
-curl -X POST -H "Content-Type: application/json" -d '{"username": "me", "password": "mypass"}' http://localhost:8000/signup
+curl -v -X POST -H "Content-Type: application/json" -d '{"username": "me", "password": "mypass"}' http://localhost:8000/signup
 ```
