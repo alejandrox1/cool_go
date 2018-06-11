@@ -35,6 +35,7 @@ func readVaultConfig(filename string) (vaultConfig Vault, err error) {
 func getDBCreds(configFile string) (string, error) {
 	vaultConfig, err := readVaultConfig(configFile)
 	if err != nil {
+        fmt.Printf("getDBCreds error while getting configuration information from %s: %s\n", configFile, err)
 		panic(err)
 	}
 
@@ -42,29 +43,30 @@ func getDBCreds(configFile string) (string, error) {
 		Address: vaultConfig.Addr,
 	})
 	if err != nil {
-		fmt.Println(err)
+        fmt.Printf("getDBCreds error while instantiating vault client: %s\n", err)
 		os.Exit(1)
 	}
 	client.SetToken(vaultConfig.Token)
 
 	secretValues, err := client.Logical().Read(vaultConfig.Service)
     if err != nil {
+        fmt.Printf("getDBCreds error while trying to read from the specified secret: %s\n", err)
 		panic(err)
 	}
     if secretValues == nil {
-        panic(fmt.Sprintf("getDBCreds error:%s doesn't seem to exist", vaultConfig.Service))
+        panic(fmt.Sprintf("getDBCreds error while reading from secret: %s doesn't seem to exist", vaultConfig.Service))
     }
 
 	var creds strings.Builder
     if val, ok := secretValues.Data["username"]; ok {
         creds.WriteString(fmt.Sprintf("user=%s ", val))
     } else {
-        return "", errors.New("getDBCreds error: no username field on vault path")
+        return "", errors.New("getDBCreds error while reading from secret: no username field on vault path")
     }
     if val, ok := secretValues.Data["password"]; ok {
         creds.WriteString(fmt.Sprintf("password=%s ", val))
     } else {
-        return "", errors.New("getDBCreds error: no password field on vault path")
+        return "", errors.New("getDBCreds error while reading from secret: no password field on vault path")
     }
 	creds.WriteString("host=db dbname=db sslmode=disable")
 	return creds.String(), nil
