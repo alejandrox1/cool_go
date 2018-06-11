@@ -23,4 +23,5 @@ server:
 
 clean:
 	sudo rm -rf vault/vault/ && \
+		rm -rf server/server && \
 		docker-compose down
