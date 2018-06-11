@@ -17,6 +17,9 @@ vaultlogin:
 db:
 	docker-compose up -d --build db adminer
 
+dblogin:
+	docker exec -it db /bin/sh
+
 server:
 	( cd server; CGO_ENABLED=0 go build -a -installsuffix cgo -o $@ ) && \
 		docker-compose up --build server
