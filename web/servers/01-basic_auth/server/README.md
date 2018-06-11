@@ -10,3 +10,8 @@ accepts a `POST` request with a json body of the form:
 ```
 The handler should return a status code `200` is the request was succesfully
 caried out.
+
+To test it out,
+```
+curl -X POST -H "Content-Type: application/json" -d '{"username": "me", "password": "mypass"}' http://localhost:8000/signup
+```
