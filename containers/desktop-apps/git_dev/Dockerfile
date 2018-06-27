@@ -11,7 +11,7 @@ ARG USER=docker
 ARG REPO=https://github.com/alejandrox1/sd2e-cli
 
 RUN apt-get update -y && apt-get install -y git build-essential \
-    vim bash-completion
+    vim bash-completion curl
     # Commenting these out in order to have the system updated - may need to
     # install something during an interactive run
     #rm -rf /var/lib/apt/lists/* && \
@@ -21,10 +21,15 @@ RUN useradd -u $UID -ms /bin/bash $USER
 USER $USER
 
 WORKDIR /home/$USER
+
+# Set a cool prompt
+RUN curl -L https://raw.githubusercontent.com/alejandrox1/dev_env/master/local-setup/bash_prompt \
+    -o ~/.bash_prompt && \
+    echo "source ~/.bash_prompt" >> ~/.bashrc
+
+# Get your repo
 RUN git clone --recurse-submodules $REPO
 
 ENV PATH /home/$USER/sd2e-cli/bin:$PATH
-
-WORKDIR /home/$USER/sd2e-cli
 
 CMD ["/bin/bash"]
