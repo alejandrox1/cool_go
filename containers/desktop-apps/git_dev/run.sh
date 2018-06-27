@@ -15,8 +15,6 @@
 ##      -h|--help print to stdout any help information included in the header
 ##                of the script.
 ##
-##      --get-tar downloads sd2e-cli tarball from main repo.
-##
 set -e
 set -o pipefail
 export blue="\e[1;34m"                                                         
@@ -29,7 +27,6 @@ CONTAINER="sd2e-cli-dev"
 REPO="https://github.com/alejandrox1/sd2e-cli"
 
 # Input parameters
-GET_TAR="false"
 
 # Parse command line arguments.
 while [[ "$#" > 0 ]]; do
@@ -44,9 +41,6 @@ while [[ "$#" > 0 ]]; do
             echo "$(grep "^##" ${BASH_SOURCE[0]} | cut -c 4-)"
             exit 0
             ;;
-        --get-tar)
-            GET_TAR="true"
-            ;;
         *)
             >&2 echo "Unknown command-line option: '${arg}'."
             exit 1
@@ -55,13 +49,6 @@ while [[ "$#" > 0 ]]; do
     shift
 done
 
-
-if [ "${GET_TAR}" == "true" ]; then
-    echo -e "${red}Getting package tarball...${reset}"
-    curl -L https://raw.githubusercontent.com/sd2e/sd2e-cli/master/sd2e-cloud-cli.tgz \
-        -o sd2e-cloud-cli.tgz && \
-        exit 0
-fi
 
 
 echo -e "${red}SD2E-CLI development starting...${reset}"
