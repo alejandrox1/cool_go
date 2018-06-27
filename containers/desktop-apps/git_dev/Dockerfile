@@ -30,6 +30,5 @@ RUN curl -L https://raw.githubusercontent.com/alejandrox1/dev_env/master/local-s
 # Get your repo
 RUN git clone --recurse-submodules $REPO
 
-ENV PATH /home/$USER/sd2e-cli/bin:$PATH
 
 CMD ["/bin/bash"]
