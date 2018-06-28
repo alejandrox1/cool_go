@@ -2,7 +2,7 @@ FROM ubuntu:18.04
 MAINTAINER alejandrox1
 
 RUN apt-get update -y && apt-get install -y git build-essential \
-    vim bash-completion curl sudo
+    vim bash-completion curl sudo && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /src/.*deb
 
