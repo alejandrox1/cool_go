@@ -11,10 +11,12 @@ import (
 	"os"
 	"time"
 
+	"github.com/auth0-community/auth0"
 	"github.com/auth0/go-jwt-middleware"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	jose "gopkg.in/square/go-jose.v2"
 )
 
 var mySigningKey = []byte("secret-key")
@@ -124,6 +126,26 @@ func addFeedbackHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func authMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		secret := []byte("{ATH0_API_SECRET}")
+		secretProvider := auth0.NewKeyProvider(secret)
+		audience := []string{"{AUTH0_API_AUDIENCE}"}
+
+		configuration := auth0.NewConfiguration(secretProvider, audience, "https://{AUTH0_DOMAIN}.auth0.com/", jose.HS256)
+		validator := auth0.NewValidator(configuration, nil)
+
+		_, err := validator.ValidateRequest(r)
+		if err != nil {
+			log.Printf("Token is not valid: %s\n", err)
+			w.WriteHeader(http.StatusUnauthorized)
+			fmt.Fprintf(w, "Unauthorized")
+		} else {
+			next.ServeHTTP(w, r)
+		}
+	})
+}
+
 func main() {
 	r := mux.NewRouter()
 
@@ -136,8 +158,10 @@ func main() {
 
 	r.HandleFunc("/get-token", getTokenHandler).Methods("GET")
 
-	r.Handle("/products", jwtMiddleware.Handler(http.HandlerFunc(productsHandler))).Methods("GET")
-	r.Handle("/products/{slug}/feedback", jwtMiddleware.Handler(http.HandlerFunc(addFeedbackHandler))).Methods("POST")
+	//r.Handle("/products", jwtMiddleware.Handler(http.HandlerFunc(productsHandler))).Methods("GET")
+	//r.Handle("/products/{slug}/feedback", jwtMiddleware.Handler(http.HandlerFunc(addFeedbackHandler))).Methods("POST")
+	r.Handle("/products", authMiddleware(http.HandlerFunc(productsHandler))).Methods("GET")
+	r.Handle("/products/{slug}/feedback", authMiddleware(http.HandlerFunc(addFeedbackHandler))).Methods("POST")
 
 	http.ListenAndServe("0.0.0.0:3000", handlers.LoggingHandler(os.Stdout, r))
 }
