@@ -1,4 +1,4 @@
-function chatroom() {
+function chatroom(host) {
     var socket = null;
     var msgBox = $("#chatbox textarea");
     var messages = $("#messages");
@@ -20,7 +20,7 @@ function chatroom() {
     if (!window["WebSocket"]) {
         alert("Error: your browswer doesn't seem to support websocket connections.")
     } else {
-        socket = new WebSocket("ws://{{.Host}}/room");
+        socket = new WebSocket("ws://"+host+"/room");
         
         socket.onclose = function() {
             alert("Connection has been closed.");
