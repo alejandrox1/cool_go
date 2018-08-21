@@ -4,6 +4,7 @@ import (
     "log"
     "net/http"
 
+    "github.com/alejandrox1/cool_go/tooling/tracer"
     "github.com/gorilla/websocket"
 )
 
@@ -21,6 +22,9 @@ type room struct {
 
     // clients holds all clients currently connected to the room.
     clients map[*client]bool
+
+    // tracer will receive information of activity in the room.
+    tracer tracer.Tracer
 }
 
 
@@ -30,6 +34,7 @@ func newRoom() *room {
         join: make(chan *client),
         leave: make(chan *client),
         clients: make(map[*client]bool),
+        tracer: tracer.Off(),
     }
 }
 
@@ -40,14 +45,18 @@ func (r *room) run() {
         case client := <-r.join:
             // Joining room.
             r.clients[client] = true
+            r.tracer.Trace("New client joined")
         case client := <-r.leave:
             // Leaving room.
             delete(r.clients, client)
             close(client.send)
+            r.tracer.Trace("Client left")
         case msg := <-r.forward:
+            r.tracer.Trace("Message received: ", string(msg))
             // Broadcast message.
             for client := range r.clients {
                 client.send <- msg
+                r.tracer.Trace(" -- sent to client")
             }
         }
     }
@@ -78,6 +87,8 @@ func (r *room) ServeHTTP(w http.ResponseWriter, req *http.Request) {
     }
     r.join <- client
     defer func() { r.leave <-client }()
+
+    r.tracer.Trace("Created client")
 
     go client.write()
     client.read()
