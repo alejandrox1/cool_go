@@ -1,0 +1,33 @@
+- hosts: master
+  become: yes
+  become_user: root
+  become_method: sudo
+  tasks:
+      - name: Initialize the cluster
+        shell: kubeadm init >> cluster_initialized.txt
+        args:
+            chdir: $HOME
+            creates: cluster_initialized.txt
+
+      - name: Create .kube directory
+        become: yes
+        become_user: centos
+        file:
+            path: $HOME/.kube
+            state: directory
+            mode: 0755
+
+      - name: Copy admin.conf to user's kube config
+        copy:
+            src: /etc/kubernetes/admin.conf
+            dest: /home/centos/.kube/config
+            remote_src: yes
+            owner: centos
+
+      - name: Install pod network
+        become: yes
+        become_user: centos
+        shell: kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')" >> pod_network_setup.txt
+        args:
+            chdir: $HOME
+            creates: pod_network_setup.txt
