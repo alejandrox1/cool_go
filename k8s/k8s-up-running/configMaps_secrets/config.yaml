@@ -1,0 +1,16 @@
+apiVersion:
+data:
+    another-param: another-value
+    extra-param: extra-value
+    my-config.txt: |
+        # Simple config file that may be ued to configure and application.
+        parameter1 = value1
+        parameter2 = value2
+kind: ConfigMap
+metadata:
+    creationTimestamp: 10092018
+    name: my-config
+    namespace: default
+    resourceVersion: "13556"
+    selfLink: /api/v1/namespaces/default/configmaps/my-config
+    uid: 3564c553-f7de-11e6-98c9-06135271a273

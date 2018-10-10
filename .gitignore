@@ -11,3 +11,7 @@ k8s/minikube
 # 
 *.bin
 *.o
+
+# Ignore keys and stuff
+*.crt
+*.key
