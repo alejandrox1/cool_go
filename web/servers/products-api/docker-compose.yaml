@@ -1,0 +1,48 @@
+version: "3.6"
+
+networks:
+    servernet:
+
+volumes:
+    data:
+
+services:
+    db:
+        build: ./db/
+        hostname: db
+        container_name: db
+        environment:                                                            
+            POSTGRES_USER: "${POSTGRES_USER}" 
+            POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}" 
+            POSTGRES_DB: "${POSTGRES_DB}" 
+        volumes:
+            - data:/var/lib/postgresql/data
+        networks:
+            - servernet
+
+    adminer:
+        image: adminer
+        restart: always
+        hostname: adminer
+        container_name: adminer
+        networks:
+            - servernet
+        ports:
+            - 8080:8080
+
+    server:
+        build: ./server/ 
+        hostname: server
+        container_name: server
+        environment:
+            APP_DB_HOST: "${DBHOST}"
+            APP_DB_PORT: "${DBPORT}"
+            APP_DB_USERNAME: "${POSTGRES_USER}"
+            APP_DB_PASSWORD: "${POSTGRES_PASSWORD}"
+            APP_DB_NAME: "${POSTGRES_DB}"
+        networks:
+            - servernet
+        ports:
+            - 8000:8000
+        depends_on:
+            - db
