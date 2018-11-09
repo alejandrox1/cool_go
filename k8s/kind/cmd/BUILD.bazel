@@ -1,0 +1,20 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "go_default_library",
+    srcs = [
+        "build.go",
+        "build_image.go",
+        "create.go",
+        "delete.go",
+        "root.go",
+    ],
+    importpath = "github.com/alejandrox1/cool_go/k8s/kind/cmd",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/build:go_default_library",
+        "//pkg/cluster:go_default_library",
+        "//vendor/github.com/golang/glog:go_default_library",
+        "//vendor/github.com/spf13/cobra:go_default_library",
+    ],
+)

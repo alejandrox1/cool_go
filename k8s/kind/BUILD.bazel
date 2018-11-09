@@ -1,0 +1,21 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+load("@bazel_gazelle//:def.bzl", "gazelle")
+
+# gazelle:prefix github.com/alejandrox1/cool_go/k8s/kind
+gazelle(name = "gazelle")
+
+
+go_library(
+    name = "go_default_library",
+    srcs = ["main.go"],
+    importpath = "github.com/alejandrox1/cool_go/k8s/kind",
+    visibility = ["//visibility:private"],
+    deps = ["//cmd:go_default_library"],
+)
+
+go_binary(
+    name = "kind",
+    embed = [":go_default_library"],
+    importpath = "github.com/alejandrox1/cool_go/k8s/kind",
+    visibility = ["//visibility:public"],
+)
