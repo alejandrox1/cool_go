@@ -1,7 +1,10 @@
+---
 - hosts: master
-  become: yes
+  become: "yes"
   become_user: root
   become_method: sudo
+  vars:
+      ansible_python_interpreter: "/usr/bin/env python3"
   tasks:
       - name: Initialize the cluster
         shell: kubeadm init >> cluster_initialized.txt
@@ -10,8 +13,8 @@
             creates: cluster_initialized.txt
 
       - name: Create .kube directory
-        become: yes
-        become_user: centos
+        become: "yes"
+        become_user: kubernetes
         file:
             path: $HOME/.kube
             state: directory
@@ -20,14 +23,26 @@
       - name: Copy admin.conf to user's kube config
         copy:
             src: /etc/kubernetes/admin.conf
-            dest: /home/centos/.kube/config
-            remote_src: yes
-            owner: centos
+            dest: /home/kubernetes/.kube/config
+            remote_src: "yes"
+            owner: kubernetes
 
       - name: Install pod network
-        become: yes
-        become_user: centos
+        become: "yes"
+        become_user: kubernetes
         shell: kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')" >> pod_network_setup.txt
         args:
             chdir: $HOME
             creates: pod_network_setup.txt
+
+      - name: Install MetalLB
+        shell: kubectl apply -f https://raw.githubusercontent.com/google/metallb/master/manifests/metallb.yaml
+
+      - name: Copy MetalLB config file
+        copy:
+            src: ./metallb.yaml
+            dest: /home/kubernetes/metallb.yaml
+            owner: kubernetes
+
+      - name: Configure MetalLB
+        shell: kubectl create -f /home/kubernetes/metallb.yaml
