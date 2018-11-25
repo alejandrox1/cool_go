@@ -1,0 +1,30 @@
+---
+apiVersion: apps/v1beta2
+kind: ReplicaSet
+metadata:
+    name: kubia
+spec:
+    replicas: 3
+    selector:
+        matchLabels:
+            app: kubia
+    template:
+        metadata:
+            labels:
+                app: kubia
+        spec:
+            containers:
+                - name: kubia
+                  image: alejandrox1/kubia:v1.1.1
+                  ports:
+                      - name: liveliness-port
+                        containerPort: 8080
+                        protocol: TCP
+                  livenessProbe:
+                      httpGet:
+                          port: liveliness-port
+                          path: /health
+                      initialDelaySeconds: 1
+                      timeoutSeconds: 1
+                      periodSeconds: 10
+                      failureThreshold: 3

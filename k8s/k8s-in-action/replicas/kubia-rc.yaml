@@ -1,0 +1,29 @@
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+    name: kubia
+spec:
+    replicas: 3
+    selector:
+        app: kubia
+    template:
+        metadata:
+            labels:
+                app: kubia
+        spec:
+            containers:
+                - name: kubia
+                  image: alejandrox1/kubia:v1.1.1
+                  ports:
+                      - name: liveness-port
+                        containerPort: 8080
+                        protocol: TCP
+                  livenessProbe:
+                      httpGet:
+                          port: liveness-port
+                          path: /health
+                      initialDelaySeconds: 5
+                      timeoutSeconds: 1
+                      periodSeconds: 10
+                      failureThreshold: 3
