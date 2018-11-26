@@ -6,7 +6,7 @@ COPY main.go .
 RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -a -installsuffix cgo -o http-server
 
 
-FROM scratch
+FROM ubuntu:18.04
 
 COPY --from=base /go/src/app/http-server /bin/http-server
 
