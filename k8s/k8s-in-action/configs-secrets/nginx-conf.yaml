@@ -1,0 +1,19 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+  namespace: default
+data:
+  nginx-config.conf: |
+    server {
+        listen 80;
+
+        gzip on;
+        gzip_type text/plain application/xml;
+
+        location / {
+            root  /usr/share/nginx/html;
+            index index.html index.htm;
+        }
+    }
